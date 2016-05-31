@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var Objs = require('../models/objects');
-var Users = require('../models/user');
+var MakeTransaction = require('../app_controllers/makeTransaction');
 
 /* GET users listing. */
 
@@ -30,42 +30,11 @@ router.route('/:objd/get')
 	
 	// 1 Operation : Chech the buyer credit
 	// Get the Object Price	
-	Objs.findById(req.params.objd)
-	.exec(function (err, objs) {
-	    if (err) throw err;
-	    console.log("Object cost : "+objs.vt);
-	    // Get the Buyer amount
-		Users.findById(req.body.uid)
-		.exec(function (err, user) {
-		    if (err) throw err;
-		    console.log("User Credit : "+user);
-		    if(user.vt >= objs.vt){
-		    	// In this case Buyer has enought VT to buy Item
-		    	// Let's move VT from Buyer to Seller
-		    	// Increment Seller account
-				Users.findByIdAndUpdate(
-				    objs.userId,
-				    {$inc: { vt: objs.vt} },
-				    {new: true},
-				    function(err, model) {
-				    	// Decrement buyer Account
-						Users.findByIdAndUpdate(
-						     user._id,
-						    {$inc: { vt: -objs.vt} },
-						    {new: true},
-						    function(err, model) {
-						    	// Change Object's status to selling
-						    	objs.status ="selling"
-						    	res.json(objs);
-						    });	
-				    });		    					    
-		    }
-		    else{
-		        res.writeHead(406, { 'Content-Type': 'text/plain' });    	
-		        res.end('You do not have enought vt to buy this item ');
-		    }
-		});	
+
+	Objs.findById(req.params.objd).exec(function(err, objs){
+		MakeTransaction(err, objs, req, res);
 	});
+
 });
 
 
