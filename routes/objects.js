@@ -2,44 +2,47 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var Objs = require('../models/objects');
+var Users = require('../models/user');
 var MakeTransaction = require('../app_controllers/makeTransaction');
+
+var passport = require('passport');
+var Verify    = require('./verify');
 
 /* GET users listing. */
 
 router.route('/')
-.get(function(req, res, next) {
-  res.send('respond with a resource');
-});
-
+.get(Verify.verifyOrdinaryUser, function(req, res, next){
+    Users.findById(req.decoded._doc._id)
+    .populate('objectsId')
+    .exec(function (err, objs) {
+      if (err) throw err;
+      console.log("Obj : "+objs.objectsId);
+      res.json(objs.objectsId);
+    });
+})
 
 
 router.route('/publish')
-.post(function(req, res, next){
+.post(Verify.verifyOrdinaryUser, function(req, res, next){
+  req.body.userId = req.decoded._doc._id;
     Objs.create(req.body, function (err, obj){
     	if (err) throw err;
-    	var id = obj._id;
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });    	
-        res.end('Added the object with id: ' + id);
+    	var Objid = obj._id;
+
+      // Update the user info
+      Users.findByIdAndUpdate(
+          req.decoded._doc._id,             // This is the logged in's userId 
+          {$push: {"objectsId": Objid}},
+          {safe: true, upsert: true},
+          function(err, model) {
+              res.json({code:'200', message:'Object created '});
+          });
     });
 });
 
-router.route('/:objd/get')
-.put(function(req, res, netx){
-	
-	// 1 Operation : Chech the buyer credit
-	// Get the Object Price	
 
-	Objs.findById(req.params.objd).exec(function(err, objs){
-		MakeTransaction(err, objs, req, res);
-	});
-
-});
-
-
-router.route('/publish/:objd')
-.put(function(req, res, next){
+router.route('/update/:objd')
+.put(Verify.verifyOrdinaryUser, function(req, res, next){
 	Objs.findByIdAndUpdate(
 	    req.params.objd,
 	    req.body,
@@ -50,13 +53,24 @@ router.route('/publish/:objd')
 	    });
 });
 
+router.route('/get/:objd')
+.put(Verify.verifyOrdinaryUser,function(req, res, netx){
+  
+  // 1 Operation : Chech the buyer credit
+  // Get the Object Price 
+
+  Objs.findById(req.params.objd).exec(function(err, objs){
+    MakeTransaction(err, objs, req, res);
+  });
+
+});
 
 /*	FIND SECTION
 */
 //Find By Category
 router.route('/category/:catId')
 .get(function(req, res, next) {
-  Objs.find({category : req.params.catId})
+  Objs.find({'category' : req.params.catId, 'state':'Published'})
   .exec(function (err, obj) {
   	if (err) throw err;
   	res.json(obj);
@@ -77,7 +91,7 @@ router.route('/location/zip/:zip')
 router.route('/location/city/:city')
 .get(function(req, res, next) {
 	console.log(req.params.city);
-  Objs.find({'location.city' : req.params.city})
+  Objs.find({'location.city' : req.params.city, 'state':'Published'})
   .exec(function (err, obj) {
   	if (err) throw err;
   	res.json(obj);
@@ -89,7 +103,7 @@ router.route('/location/city/:city')
 router.route('/kw/:kw')
 .get(function(req, res, next) {
 	console.log(req.params.kw);
-  Objs.find({'description' :  '/^'+req.params.kw+'/'})
+  Objs.find({'description' :  '/^'+req.params.kw+'/', 'state':'Published'})
   .exec(function (err, obj) {
   	if (err) throw err;
   	res.json(obj);

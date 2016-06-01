@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var config = require('./config');
+var authenticate = require('./authenticate');
 
 // Connect to Database
 mongoose.connect(config.mongoUrl);
@@ -34,6 +35,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// passport config
+app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
