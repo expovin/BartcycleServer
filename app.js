@@ -21,6 +21,7 @@ db.once('open', function () {
 var routes = require('./routes/index');
 var objects = require('./routes/objects');
 var users = require('./routes/users');
+var categories = require('./routes/category');
 
 var app = express();
 
@@ -42,6 +43,7 @@ app.use(passport.initialize());
 app.use('/', routes);
 app.use('/users', users);
 app.use('/objs', objects);
+app.use('/cat', categories);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

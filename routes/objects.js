@@ -25,6 +25,12 @@ router.route('/')
 router.route('/publish')
 .post(Verify.verifyOrdinaryUser, function(req, res, next){
   req.body.userId = req.decoded._doc._id;
+  
+  var location =  {"zip" :req.decoded._doc.address.zip, "country":req.decoded._doc.address.country, "city":req.decoded._doc.address.city};
+
+  req.body["location"] = location;
+  console.log(req.body);
+
     Objs.create(req.body, function (err, obj){
     	if (err) throw err;
     	var Objid = obj._id;
@@ -63,13 +69,22 @@ router.route('/get/:objd')
     MakeTransaction(err, objs, req, res);
   });
 
+})
+
+.get(function(req, res, next){
+    Objs.findById(req.params.objd)
+    .populate('userId')
+    .exec(function (err, objs) {
+      if (err) throw err;
+      res.json(objs);
+    });
 });
 
 /*	FIND SECTION
 */
 //Find By Category
 router.route('/category/:catId')
-.get(function(req, res, next) {
+.get(Verify.verifyOrdinaryUser,  function(req, res, next) {
   Objs.find({'category' : req.params.catId, 'state':'Published'})
   .exec(function (err, obj) {
   	if (err) throw err;

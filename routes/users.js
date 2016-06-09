@@ -46,7 +46,10 @@ router.route('/register')
     });
 })
 
-
+router.route('/whoami')
+.get(Verify.verifyOrdinaryUser, function(req, res, next) {
+    res.json({fullName :req.decoded._doc.firstname+" "+req.decoded._doc.lastname});
+});
 
 router.route('/login')
 .post(function(req, res, next) {

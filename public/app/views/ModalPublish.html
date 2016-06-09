@@ -1,0 +1,61 @@
+<div modal="showAllModal" id="ModalLogin">
+  <div class="modal-header">
+      
+          <h4>Publish new Object</h4>
+      
+  </div>
+  <div class="modal-body">
+
+               <form class="form-horizontal" name="publishForm" ng-submit="publishNewObject()" novalidate>
+                    <div class="form-group" ng-class="{ 'has-error' : publishForm.object.title.$error.required && !publishForm.object.title.$pristine }">
+                        <label for="title" class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter the Object title" ng-model="publishForm.object.title" required>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : publishForm.object.description.$error.required && !publishForm.object.description.$pristine }">
+                        <label for="description" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="5" class="form-control" id="description" name="description"  placeholder="Enter the description" ng-model="publishForm.object.description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : publishForm.object.vt.$error.required && !publishForm.object.vt.$pristine }">
+                        <label for="vt" class="col-sm-2 control-label">Virtual Token</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="vt" name="vt"  placeholder="type the required virtual token" ng-model="publishForm.object.vt" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : publishForm.object.category.$error.required && !publishForm.object.category.$pristine }">
+                        <label for="category" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-10">
+                        <select class="form-control" class="form-control" id="category" name="category"  ng-model="publishForm.object.category" required>
+                            <option ng-repeat="category in categories">{{category.name}}</option>
+                        </select>
+                        <!--    <input type="text" class="form-control" id="category" name="category"  ng-model="registrationForm.user.category"  placeholder="select category"  required> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="file" class="col-sm-2 control-label">Image Upload</label>
+                      <!--<input type="file" class="form-control" id="ObjUpdFile" name="ObjUpdFile" ng-file-select="onUploadSelect($files)" ng-model="publishForm.object.img">-->
+
+                      <input type="file" ngf-select ng-model="picFile" name="file"    
+                             accept="image/*" ngf-max-size="2MB" required
+                             ngf-model-invalid="errorFile">
+                           <i ng-show="myForm.file.$error.required">*required</i><br>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" ng-disabled="publishForm.$invalid">Register</button>
+                        </div>
+                    </div>
+
+                </form>
+
+  </div>
+  <div class="modal-footer">
+    Not yet a user? <a ng-click="register()"> Reguister </a> now!
+    <button class="btn" ng-click="cancel()">Cancel</button>
+  </div>
+</div>

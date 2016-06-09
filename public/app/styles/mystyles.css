@@ -1,5 +1,6 @@
-.HideCol{
-  display: none;
+a {
+    color: RGB(86,173,53);
+    text-decoration: none;
 }
 
 .row-header {
@@ -36,42 +37,52 @@
   top: 0;
 }
 .navbar-inverse {
-  background: #303f9f;
+  background: #404040;
   color: #ffffff;
 }
+
+.nav > li > a:focus, .nav > li > a:hover {
+  color: RGB(86,173,53);
+  text-decoration: none;
+
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+  background-color: RGB(137,135,131);
+}
 .navbar-inverse .navbar-nav > .active > a {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav > .active > a:hover {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav > .active > a:focus {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav > .open > a {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav > .open > a:hover {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background: #1a237e;
+  background: RGB(137,135,131);
   color: #ffffff;
 }
 .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
-  background-color: #303f9f;
+  background-color: #404040;
   color: #eeeeee;
 }
 .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover {
   color: #000000;
 }
 .navbar-inverse .navbar-nav .open .dropdown-menu {
-  background-color: #303f9f;
+  background-color: #404040;
   color: #eeeeee;
 }
 address {
@@ -97,4 +108,41 @@ body {
   bottom: 0px;
   position: absolute;
   right: 0px;
+}
+
+.panel-title i {
+    float: right;
+     margin: 0 0 5px 5px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+.app-modal-window .modal-dialog {
+  width: 900px;
+}
+
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+.app-modal-login .modal-dialog {
+  width: 800px;
 }

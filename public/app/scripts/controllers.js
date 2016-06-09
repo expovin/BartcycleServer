@@ -1,189 +1,199 @@
 'use strict';
 
-angular.module('confusionApp')
-        .controller('MenuController', ['$scope', 'menuFactory', function($scope, menuFactory) {
-            
-            $scope.tab = 1;
-            $scope.filtText = '';
-            $scope.showDetails = true;
-            $scope.showMenu = false;            
-            $scope.message = "Loading ...";
+angular.module('bartCycle')
 
-            $scope.dishes= {};
-            
-            $scope.dishes = menuFactory.getDishes().query(
-                function(response) {
-                    $scope.dishes = response;
-                    $scope.showMenu = true;
-                },
-                function(response) {
-                    $scope.message = "Error: "+response.status + " " + response.statusText;
-                });            
-              
-            $scope.select = function(setTab) {
-                $scope.tab = setTab;
-                
-                if (setTab === 2) {
-                    $scope.filtText = "appetizer";
-                }
-                else if (setTab === 3) {
-                    $scope.filtText = "mains";
-                }
-                else if (setTab === 4) {
-                    $scope.filtText = "dessert";
-                }
-                else {
-                    $scope.filtText = "";
-                }
-            };
-
-            $scope.isSelected = function (checkTab) {
-                return ($scope.tab === checkTab);
-            };
-    
-            $scope.toggleDetails = function() {
-                $scope.showDetails = !$scope.showDetails;
-            };
+        .run(['$sessionStorage','$http', function($sessionStorage,$http) {
+            $http.defaults.headers.common['x-access-token']=$sessionStorage.get('token');
         }])
 
-        .controller('ContactController', ['$scope',  function($scope) {
+        .controller('HeaderController', ['$scope', 'headerFactory','$modal','$sessionStorage','$state','loginFactory', 
+            function($scope,headerFactory,$modal,$sessionStorage,$state,loginFactory) {
 
-            $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
-            
-            var channels = [{value:"tel", label:"Tel."}, {value:"Email",label:"Email"}];            
-            
-            $scope.channels = channels;
-            $scope.invalidChannelSelection = false;
+            console.log("Logged flag :" + $sessionStorage.isLogged('token'));
+            $scope.isLoggedIn = $sessionStorage.isLogged('token');
+
+            if($scope.isLoggedIn)
+            {
+
+                loginFactory.getFullname().get()
+                .$promise.then(
+                    function(response){
+                        $scope.fullName=response.fullName;
+                    },
+                    function(response) {
+                        console.log("Errore!");
+                    }
+                );
+
+            }
+
+            $scope.Publish = function(){
+                console.log("Register");
+                $modal.open({
+                  templateUrl: 'views/ModalPublish.html',
+                  controller: 'PublishController',
+                  windowClass: 'app-modal-login',
+                  scope: $scope
+                });
+            }
+
+
+            $scope.addServer = function() {
+                    $scope.ObjsByKw =  headerFactory.getObjectByKw().get({kw:$scope.activeLayer})
+                    .$promise.then(
+                        function(response){
+                            console.log('Ok');
+                        },
+                        function(response) {
+                            console.log("Errore!");
+                        }
+                    );
+            }
+
+            $scope.login = function(){
+                $modal.open({
+                  templateUrl: 'views/ModalLogin.html',
+                  controller: 'LoginController',
+                  windowClass: 'app-modal-login',
+                  scope: $scope
+                });
+                
+            }
+
+            $scope.logout = function(){
+                $sessionStorage.delete('token');
+                $state.reload();
+            }
                         
         }])
 
-        .controller('FeedbackController', ['$scope', 'feedbackFactory', function($scope,feedbackFactory) {
+        .controller('LoginController', ['$window','$scope','loginFactory','$sessionStorage','$modalInstance','$modal',  
+            function($window,$scope,loginFactory,$sessionStorage,$modalInstance,$modal) {   
+
+            $scope.doLogin = function() {
+                console.log($scope.email);
+
+                    loginFactory.doLogin().save({ username: $scope.email, password : $scope.pwd },$scope.ticket, function(user, putResponseHeaders){
+                        $scope.token = user.token;
+                        $sessionStorage.store('token',$scope.token);
+                        $modalInstance.close();
+
+                        $window.location.reload()
+
+                    });
+            }
+
+            $scope.cancel = function () {
+                console.log("Cancel");
+                $modalInstance.dismiss('cancel');
+            }
+
+            $scope.register = function(){
+                console.log("Register");
+                $modal.open({
+                  templateUrl: 'views/ModalRegister.html',
+                  controller: 'RegisterController',
+                  windowClass: 'app-modal-login',
+                  scope: $scope
+                });
+            }
             
-            $scope.sendFeedback = function() {
-                console.log('sendFeedback fired!');
+
+        }])
+
+        .controller('PublishController', ['$scope','userFactory','categoryFactory','objectFactory','$modalInstance',
+          function($scope,userFactory,categoryFactory,objectFactory,$modalInstance) {
+            console.log("PublishController fired!");
+
+            $scope.categories =  categoryFactory.getCategories().query(
+                function(response) {                        
+                    console.log("OK!");
+                },
+                function(response) {
+                    console.log("Qui ERRORE!");
+            });
+
+            $scope.publishNewObject = function(){                
+                $scope.publishForm.object.state = "Published";
+                $scope.publishForm.object.img = "data:image/jpeg;base64,";
+                console.log($scope.publishForm.object);
+                objectFactory.publishNewObject().save($scope.publishForm.object, function(){
+                    console.log("Object Published!");
+                    $modalInstance.dismiss('cancel');
+                });
+            }
+        }])
+
+        .controller('RegisterController', ['$scope','userFactory','$modalInstance',  function($scope,userFactory,$modalInstance) {
+
+            $scope.registerUser = function() {
+                console.log('registerUser fired!');
+                $scope.registrationForm.user.vt=5;
                 
-                if ($scope.feedback.agree && ($scope.feedback.mychannel == "")) {
-                    $scope.invalidChannelSelection = true;
-                    console.log('incorrect');
-                }
-                else {
-                    // All check are OK, so let's send the feedback to the server
-                    feedbackFactory.getFeedbacks().save({ param: "myParam" },$scope.feedback, function(){
-                        console.log('Data Saved: '+ $scope.feedback);
+                userFactory.getUsers().save($scope.registrationForm.user, function(){
+                    console.log("User Created!");
+                    $modalInstance.dismiss('cancel');
+                });
+
+            }
+
+        }])
+
+        .controller('ObjDettController', ['$scope', 'resultFactory','$location', function($scope,headerFactory,$location) {
+            $scope.idObj = $location.search().id;
+
+                    headerFactory.getObjectDetails().get({objId:$scope.idObj})
+                    .$promise.then(
+                        function(response){
+                            console.log("get all details");
+                            console.log(response.title);
+                            $scope.ObjsDetails = response;
+                        },
+                        function(response) {
+                            console.log("Errore!");
+                        }
+                    );
+                        
+        }])
+
+
+
+        .controller('LocationController', ['$scope',  function($scope) {
+            
+
+        }])
+
+
+        .controller('ResultsController', ['$scope', '$location','resultFactory', function($scope,$location,resultFactory) {
+            $scope.category = $location.search().cat;
+            
+                    $scope.results =  resultFactory.getObjectByCat($scope.category).query(
+                    function(response) {                        
+                        console.log("OK!");
+                    },
+                    function(response) {
+                        console.log("Qui ERRORE!");
                     });
 
-                    // Than reset all the state
-                    $scope.invalidChannelSelection = false;
-                    $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
-                    $scope.feedback.mychannel="";
-                    $scope.feedbackForm.$setPristine();
-                    console.log($scope.feedback);
-                }                       
-            };
         }])
 
-        .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
-            $scope.dish = {};
-            $scope.showDish = false;
-            $scope.message="Loading ...";
 
-            $scope.stars=[1,2,3,4,5];
-
-            $scope.dish = menuFactory.getDishes().get({id:parseInt($stateParams.id,10)})
-            .$promise.then(
-                            function(response){
-                                $scope.dish = response;
-                                $scope.showDish = true;
-                            },
-                            function(response) {
-                                $scope.message = "Error: "+response.status + " " + response.statusText;
-                            }
-            );            
-            
-        }])
-
-        .controller('DishCommentController', ['$scope', 'menuFactory', function($scope,menuFactory) {
-            
-            $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-
-            $scope.submitComment = function () {
-               // $scope.mycomment.date = new Date().toISOString();
-                this.comment.date = new Date().toISOString();
-                console.log(this.comment);
-                $scope.dish.comments.push(this.comment);
-
-                menuFactory.getDishes().update({id:$scope.dish.id},$scope.dish);
-                $scope.commentForm.$setPristine();
-                $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-            }            
-        }])
 
         // implement the IndexController and About Controller here
 
-        .controller('IndexController', ['$scope','menuFactory', 'corporateFactory', function($scope, menuFactory, corporateFactory) {
+        .controller('CategoryController', ['$scope','categoryFactory', function($scope,categoryFactory) {
             
-            // Executive Chef
-            $scope.leader={};
-            $scope.showLeader=false;
-            $scope.messageLeader="Loading...";
-            $scope.leader = corporateFactory.getLeaders().get({id:0})
-            .$promise.then(
-                function(response){
-                   $scope.leader = response;
-                   $scope.showLeader = true;
-                },
-               function(response) {
-                    $scope.messageLeader = "Error: "+response.status + " " + response.statusText;
-                }
-            );             
 
-
-            // Promotion of the month
-            $scope.promotion={};
-            $scope.showPromotion=false;
-            $scope.messagePromotion="Loading...";
-            $scope.promotion = menuFactory.getPromotion().get({id:0})
-            .$promise.then(
-                function(response){
-                   $scope.promotion = response;
-                   $scope.showPromotion = true;
-                },
-               function(response) {
-                    $scope.messagePromotion = "Error: "+response.status + " " + response.statusText;
-                }
-            ); 
-
-            // Featured Dish
-            $scope.dish = {};
-            $scope.showDish = false;
-            $scope.messageDish="Loading ...";       
-            $scope.dish = menuFactory.getDishes().get({id:0})
-            .$promise.then(
-                function(response){
-                   $scope.dish = response;
-                   $scope.showDish = true;
-                },
-               function(response) {
-                    $scope.messageDish = "Error: "+response.status + " " + response.statusText;
-                }
-            );            
+                     $scope.categories =  categoryFactory.getCategories().query(
+                    function(response) {                        
+                        console.log("OK!");
+                    },
+                    function(response) {
+                        console.log("Qui ERRORE!");
+                    });
 
         }])
 
-        .controller('AboutController', ['$scope', 'corporateFactory', function($scope, corporateFactory) {
-            
-
-            $scope.leaders={};
-            $scope.showLeaders=false;
-            $scope.messageLeaders="Loading...";
-            $scope.leaders = corporateFactory.getLeaders().query(
-                function(response) {
-                    $scope.leaders = response;
-                    $scope.showLeaders = true;
-                },
-                function(response) {
-                    $scope.messageLeaders = "Error: "+response.status + " " + response.statusText;
-                });
-        }])        
+    
 
 ;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('confusionApp', ['ui.router','ngResource'])
+angular.module('bartCycle', ['ui.router','ngResource','angular.filter','ui.bootstrap'])
 .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
         
@@ -10,10 +10,11 @@ angular.module('confusionApp', ['ui.router','ngResource'])
                 views: {
                     'header': {
                         templateUrl : 'views/header.html',
+                        controller  : 'HeaderController'
                     },
                     'content@': {
                         templateUrl : 'views/home.html',
-                        controller  : 'IndexController'
+                        controller  : 'LocationController'
                     },
                     'footer': {
                         templateUrl : 'views/footer.html',
@@ -23,48 +24,48 @@ angular.module('confusionApp', ['ui.router','ngResource'])
             })
         
             // route for the aboutus page
-            .state('app.aboutus', {
-                url:'aboutus',
+            .state('app.location', {
+                url:'location',
                 views: {
                     'content@': {
-                        templateUrl : 'views/aboutus.html',
-                        controller  : 'AboutController'                  
+                        templateUrl : 'views/location.html',
+                        controller  : 'LocationController'                  
                     }
                 }
             })
         
             // route for the contactus page
-            .state('app.contactus', {
-                url:'contactus',
+            .state('app.category', {
+                url:'category',
                 views: {
                     'content@': {
-                        templateUrl : 'views/contactus.html',
-                        controller  : 'ContactController'                  
+                        templateUrl : 'views/category.html',
+                        controller  : 'CategoryController'                  
                     }
                 }
             })
 
-            // route for the menu page
-            .state('app.menu', {
-                url: 'menu',
+            // route for the contactus page
+            .state('app.results', {
+                url:'results',
                 views: {
                     'content@': {
-                        templateUrl : 'views/menu.html',
-                        controller  : 'MenuController'
+                        templateUrl : 'views/results.html',
+                        controller  : 'ResultsController'                  
                     }
                 }
             })
 
-            // route for the dishdetail page
-            .state('app.dishdetails', {
-                url: 'menu/:id',
+            // route for the contactus page
+            .state('app.objdetails', {
+                url:'ObjectDetails',
                 views: {
                     'content@': {
-                        templateUrl : 'views/dishdetail.html',
-                        controller  : 'DishDetailController'
-                   }
+                        templateUrl : 'views/objdetails.html',
+                        controller  : 'ObjDettController'                  
+                    }
                 }
-            });
+            })
     
         $urlRouterProvider.otherwise('/');
     })

@@ -20,14 +20,18 @@ var Objects = new Schema({
       type: String,
       required: true
     },
-    userId : {
+    userId : [{
       type: Schema.Types.ObjectId,
-      ref : 'users',
+      ref : 'User',
       required: true
-    },
+    }],
     state : {
       type : String,
       required : true
+    },
+    img : {
+      type : String,
+      required : false
     },
     location:   {
         zip : {

@@ -1,0 +1,13 @@
+    <div class="container">
+
+        <h1>Search by category</h1>   
+
+            <div ng-repeat="category in categories">
+                <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                <div class="col-sm-3">
+                    <h2>{{category.name}}</h2>
+                    <a href="#results?cat={{category.name}}"><img ng-src="{{category.icon}}" alt="{{category.name}}" width="150" /></a>
+                </div>
+            </div>
+
+    </div>

@@ -1,0 +1,19 @@
+    <div class="container">
+        <div class="row row-content">
+            <h1>Results {{category}}</h1>    
+
+
+<div class="media" ng-repeat="obj in results">
+  <div class="media-left media-top">
+    <a href="#ObjectDetails?id={{obj._id}}">
+      <img class="media-object" ng-src="images/alberto.png" alt="Alternative text">
+    </a>
+  </div>
+  <div class="media-body">
+    <h3 class="media-heading">{{obj.title}}   <span class="badge">{{obj.vt}}</span></h3>
+    <small>{{obj.category}}</small>
+    <p>{{obj.description}}</p>
+    <p>{{obj.location.zip}} {{obj.location.city}}</p>
+  </div>
+</div>   
+        </div>

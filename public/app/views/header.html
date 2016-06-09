@@ -1,52 +1,48 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+          <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
                 </button>
-               <a class="navbar-brand" ui-sref="app"><img src="images/logo.png" height=30 width=41></a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
+                <a class="navbar-brand" href="#">Project name</a>
+              </div>
+              <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a ui-sref="app">
-                        <span class="glyphicon glyphicon-home"
-                         aria-hidden="true"></span> Home</a></li>
-                    <li><a ui-sref="app.aboutus">
-                        <span class="glyphicon glyphicon-info-sign"
-                         aria-hidden="true"></span> About</a></li>
-                    <li><a ui-sref="app.menu">
-                         <span class="glyphicon glyphicon-list-alt"
-                         aria-hidden="true"></span>
-                          Menu</a></li>
-                     <li><a ui-sref="app.contactus">
-                     <i class="fa fa-envelope-o"></i> Contact</a></li>
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#location">Find by Location</a></li>
+                  <li><a href="#category">Find by Category</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                <li ng-if="!isLoggedIn">
+                      <a ng-click="login()"><h3><span class="glyphicon glyphicon-log-in" aria-hidden="true" ></span></h3></a>
+                </li>
+                <div ng-if="isLoggedIn">
+                  <li class="col-md-10">
+                      <h3>{{fullName}}</h3>
+                  </li>
+                  <li class="col-md-1">
+                        <a ng-click="logout()"><h3><span class="glyphicon glyphicon-log-out" aria-hidden="true" ></span></h3></a>    
+                  </li>
+                </div>
+                </ul>  
+              </div>
             </div>
+          </nav>
         </div>
     </nav>         
                
-    <header class="jumbotron">
-
-        <!-- Main component for a primary marketing message or call to action -->
-
-        <div class="container">
-            <div class="row row-header">
-                <div class="col-xs-12 col-sm-8">
-                    <h1>Ristorante con Fusion</h1>
-                    <p style="padding:40px;"></p>
-                    <p>We take inspiration from the World's best cuisines, and create
-                     a unique fusion experience. Our lipsmacking creations will 
-                     tickle your culinary senses!</p>
-                </div>
-                <div class="col-xs-12 col-sm-2">
-                <p style="padding:20px;"></p>
-                <img src="images/logo.png" class="img-responsive">
-                </div>
-                <div class="col-xs-12 col-sm-2">
-                </div>
-            </div>
-        </div>
-    </header>
+<div class="jumbotron">
+  <h1>Bartcycle <small> Give your contribution to improve our environment</small></h1>
+  <div class="col-md-10">
+      <p ng-if="!isLoggedIn">Not yet a User. <a ng-click="register()">Sign-up</a> Today and start to give your contribution to our environment. </p>
+  </div>
+  <div class="col-md-2">
+      <button type="button" class="btn btn-primary" ng-if="isLoggedIn" ng-click="Publish()">Publish</button>
+  </div>
+  
+</div>

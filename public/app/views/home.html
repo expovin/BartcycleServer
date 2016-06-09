@@ -1,84 +1,35 @@
     <div class="container">
         <div class="row row-content">
-            <div class="col-xs-12 col-sm-3 col-sm-push-9">
-                <p style="padding:20px;"></p>
-                <h3 align="center">Our Lipsmacking Culinary Creations</h3>
+            <div class="col-xs-12 col-sm-4">
+                <h3 align="center">Our missions</h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur malesuada odio in ligula porttitor lacinia. Morbi suscipit nibh a libero tempor, id luctus sem ultricies. 
+                    Praesent laoreet sit amet lectus ut finibus. Vestibulum euismod sagittis justo, id lacinia odio sodales ac. Sed vitae iaculis ipsum, ut bibendum ipsum. 
+                    Donec viverra lectus in ligula posuere, in semper magna porttitor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+                    Aenean ultricies cursus odio sed ultrices. 
+                </p>
             </div>
-            <div class="col-xs-12 col-sm-9 col-sm-pull-3">
+            <div class="col-xs-12 col-sm-4">
+                <h3 align="center">Carbon footprint</h3>
+                <p>
+                    Mauris dapibus eros quis euismod faucibus. Nunc arcu ligula, commodo in lacus porta, consequat suscipit quam. Aenean mauris nisl, euismod vel commodo sed, laoreet non dolor. 
+                    Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam tempor metus erat, sed rutrum elit consectetur id. Praesent bibendum, mauris quis malesuada elementum, leo enim consectetur quam, 
+                    in posuere tortor magna vitae sapien. 
+                    Nunc bibendum, mauris id dignissim euismod, tellus massa tristique erat, sit amet accumsan justo nisi non erat. Phasellus feugiat lorem vitae justo lacinia ultrices. 
+                    Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras et ipsum id dui sollicitudin suscipit ac vitae mi. 
+                    Vivamus malesuada elit a enim facilisis vestibulum vitae vel justo. Mauris sed dapibus velit, vitae vulputate eros. Pellentesque tempor pharetra augue, ut dictum mi tristique id. 
+                    Mauris eget elementum lacus, et dignissim mi.
+                </p>
 
-                <div ng-if="!showDish">
-                    <h3>{{messageDish}}</h3>
-                </div>
-                <div class="media" ng-if="showDish">
-
-                    <div class="media-left media-middle">
-                        <a href="#">
-                            <img class="media-object img-thumbnail" src="{{dish.image}}" alt="{{dish.name}}">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h2 class="media-heading">
-                            {{dish.name}}
-                            <span class="label label-danger">{{dish.label}}</span>
-                            <span class="badge">{{dish.price | currency : symbol : fractionSize}}</span>
-                        </h2>
-                        <p>{{dish.description}}</p>
-                    </div>
-                </div>
             </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 align="center">Your contribution to save the world</h3>
+                <p>
+                    Duis nec gravida nibh. Vivamus vestibulum eleifend justo, eget aliquet justo dignissim eu. Ut dolor dolor, consectetur in tortor mattis, aliquet semper tortor. 
+                    Donec dictum felis at libero molestie, eget faucibus elit varius. Suspendisse augue felis, suscipit in quam nec, accumsan tempor enim. 
+                    Morbi eleifend nulla ut ultricies pretium. Aenean mattis vulputate erat, eu interdum nunc lacinia sed. Suspendisse congue ligula ac faucibus malesuada. 
+                    Phasellus sapien mi, pharetra et mi sed, maximus volutpat enim. 
+                </p>
+            </div>            
         </div>
-
-
-        <div class="row row-content">
-            <div class="col-xs-12 col-sm-3">
-                <p style="padding:20px;"></p>
-                <h3 align=center>This Month's Promotions</h3>
-            </div>
-            <div class="col-xm-12 col-sm-9">
-
-                <div ng-if="!showPromotion">
-                    <h3>{{messagePromotion}}</h3>
-                </div>
-                <div class="media" ng-if="showPromotion">
-
-                <div class="media-body media-left">
-                  <h2 class="media-heading">{{promotion.name}}
-                    <span class="label label-danger">{{promotion.label}}</span>
-                    <span class="badge">{{promotion.price | currency : symbol : fractionSize}}</span>   
-                  </h2>
-                  <p>{{promotion.description}}</p>                  
-                </div>
-                <div class="media-right media-center">
-                  <a href="#"><img src="{{promotion.image}}" alt="{{promotion.name}}" class="media-object img-thumbnail"/></a>
-                </div>
-              </div>
-            </div>
-        </div>
-
-        <div class="row row-content">
-            <div class="col-xs-12 col-sm-3 col-sm-push-9">
-                <p style="padding:20px;"></p>
-                <h3 align=center>Meet our Culinary Specialists</h3>
-            </div>
-            <div class="col-xs-12 col-sm-9 col-sm-pull-3">
-
-                <div ng-if="!showLeader">
-                    <h3>{{messageLeader}}</h3>
-                </div>
-                <div class="media" ng-if="showLeader">
-
-                    <div class="media-left media-middle">
-                        <a href="#">
-                            <img class="media-object img-thumbnail" src="{{leader.image}}" alt="{{leader.name}}">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h2 class="media-heading">{{leader.name}} <small>{{leader.designation}}</small></h2>
-                        
-                        <p>{{leader.description}}</p>
-<!--                        <p><a class="btn btn-primary btn-xs" href="#">More &raquo;</a></p>  -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
