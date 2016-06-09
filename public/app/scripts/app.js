@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bartCycle', ['ui.router','ngResource','angular.filter','ui.bootstrap'])
+angular.module('bartCycle', ['ui.router','ngResource','angular.filter','ui.bootstrap','ngFileUpload','naif.base64'])
 .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
         

@@ -29,7 +29,7 @@ var Objects = new Schema({
       type : String,
       required : true
     },
-    img : {
+    picFile : {
       type : String,
       required : false
     },

@@ -21,7 +21,9 @@ angular.module('bartCycle')
                         $scope.fullName=response.fullName;
                     },
                     function(response) {
-                        console.log("Errore!");
+                        console.log("Errore! Non sei autenticato... cancello il token");
+                        $sessionStorage.delete('token');
+                        $state.reload();
                     }
                 );
 
@@ -101,8 +103,8 @@ angular.module('bartCycle')
 
         }])
 
-        .controller('PublishController', ['$scope','userFactory','categoryFactory','objectFactory','$modalInstance',
-          function($scope,userFactory,categoryFactory,objectFactory,$modalInstance) {
+        .controller('PublishController', ['$scope','userFactory','categoryFactory','objectFactory','$modalInstance','Upload','$timeout',
+          function($scope,userFactory,categoryFactory,objectFactory,$modalInstance,Upload,$timeout) {
             console.log("PublishController fired!");
 
             $scope.categories =  categoryFactory.getCategories().query(
@@ -115,13 +117,38 @@ angular.module('bartCycle')
 
             $scope.publishNewObject = function(){                
                 $scope.publishForm.object.state = "Published";
-                $scope.publishForm.object.img = "data:image/jpeg;base64,";
+                
+                console.log("object:");
                 console.log($scope.publishForm.object);
+                $scope.publishForm.object.picFile = "";
                 objectFactory.publishNewObject().save($scope.publishForm.object, function(){
                     console.log("Object Published!");
                     $modalInstance.dismiss('cancel');
                 });
             }
+
+
+
+            $scope.uploadPic = function(file) {
+            file.upload = Upload.upload({
+              url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+              data: {username: $scope.username, file: file},
+            });
+
+            file.upload.then(function (response) {
+              $timeout(function () {
+                file.result = response.data;
+              });
+            }, function (response) {
+              if (response.status > 0)
+                $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+              // Math.min is to fix IE which reports 200% sometimes
+              file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+            }
+
+
         }])
 
         .controller('RegisterController', ['$scope','userFactory','$modalInstance',  function($scope,userFactory,$modalInstance) {

@@ -146,3 +146,30 @@ body {
 .app-modal-login .modal-dialog {
   width: 800px;
 }
+
+/* Upload */
+
+.thumb {
+    width: 100px;
+  /*  height: 100px; */
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
