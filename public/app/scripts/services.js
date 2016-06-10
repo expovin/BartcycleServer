@@ -38,6 +38,11 @@ angular.module('bartCycle')
 
                 };     
 
+                resfac.getObject = function(){
+                    return $resource(baseURL+"objs/get/:objId",null, {'update':{method:'PUT' }});
+
+                }
+
                 return resfac;
         }])
 
@@ -60,6 +65,14 @@ angular.module('bartCycle')
                       return $resource(baseURL+"objs/publish",null,  {'create':{method:'PUSH'}});
                 }; 
 
+                usrfac.modifyObj = function(NewState){
+                    return $resource(baseURL+"objs/update/:objId",null,  {'update':{method:'PUT' }});
+                }
+
+                usrfac.deleteObj = function(){
+                    return $resource(baseURL+"objs/update/:objId",null,  {'update':{method:'PUT' }});
+                }
+
                 return usrfac;
         }])
 
@@ -78,6 +91,11 @@ angular.module('bartCycle')
                     return $resource(baseURL+"users/whoami",null,  {'get':{method:'GET', isArray: false}});
 
                 }   
+
+                catfac.getMyObjects = function(){
+                    return $resource(baseURL+"users/:uid/objects",null,  {'get':{method:'GET', isArray: false}});
+
+                }  
 
                 return catfac;
         }])

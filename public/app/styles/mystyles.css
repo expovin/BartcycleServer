@@ -157,6 +157,14 @@ body {
     top: 7px;
 }
 
+.icon {
+    width: 50px;
+  /*  height: 100px; */
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
 form .progress {
     line-height: 15px;
 }
@@ -164,7 +172,7 @@ form .progress {
 
 .progress {
     display: inline-block;
-    width: 100px;
+    width: 150px;
     border: 3px groove #CCC;
 }
 

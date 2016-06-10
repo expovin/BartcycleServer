@@ -24,6 +24,7 @@ router.route('/register')
 		firstname : req.body.firstname,
 		lastname : req.body.lastname,
 		vt : req.body.vt,
+        img : req.body.img,
 		address : {
 			street : req.body.address.street,
 			zip : req.body.address.zip,
@@ -48,7 +49,14 @@ router.route('/register')
 
 router.route('/whoami')
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-    res.json({fullName :req.decoded._doc.firstname+" "+req.decoded._doc.lastname});
+    console.log(req.decoded);
+
+    Users.findById(req.decoded._id)
+//    .populate('objectsId')
+    .exec(function (err, objs) {
+        if (err) throw err;
+        res.json(objs);
+    });
 });
 
 router.route('/login')
@@ -70,8 +78,7 @@ router.route('/login')
           err: 'Could not log in user'
         });
       }
-        console.log("Sono in login");
-      var token = Verify.getToken(user);
+        var token = Verify.getToken({"username":user.username,"_id":user._id});
               res.status(200).json({
         status: 'Login successful!',
         success: true,

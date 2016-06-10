@@ -7,6 +7,40 @@
   <div class="modal-body">
 
                <form class="form-horizontal" name="registrationForm" ng-submit="registerUser()" novalidate>
+
+                    <div class="form-group">
+                    <div class="col-md-3">
+
+                      <label class="btn btn-default btn-file">
+                         <img ng-show="!picFile" src="images/icons/user_icon.png" width="150"> 
+                        <!-- <input type="file" class="form-control" ngf-select ng-model="picFile" name="file" accept="image/*, .jpg" ngf-max-size="2MB" style="display: none;" base-sixty-four-input > -->
+                        <input type="file" ng-model="picFile" style="display: none;" name="picFile" base-sixty-four-input>
+                         <img data-ng-src="data:image/png;base64,{{picFile.base64}}" ng-show="picFile" class="thumb">
+                      </label>
+                     </div>
+                     <div class="col-md-6">
+                        <i ng-show="picFile.$error.required">*required</i><br>
+
+                        <!--<i ng-show="myForm.file.$error.maxSize">File too large {{errorFile.size / 1000000|number:1}}MB: max 2M</i> -->
+
+                        <div class="alert alert-danger" role="alert" ng-show="picFile.filesize > 524288">
+                          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                          <span class="sr-only">Error:</span>
+                          File too large {{picFile.filesize / 1000000|number:1}}MB: max 500KB
+                        </div>
+                        <a><h2><span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="picFile = null" ng-show="picFile" style="color:red;"></span></h2></a>
+                     </div>
+                                      
+                      
+                      <span class="progress" ng-show="picFile.progress >= 0">
+                        <div style="width:{{picFile.progress}}%" 
+                            ng-bind="picFile.progress + '%'"></div>
+                      </span>
+                      <span ng-show="picFile.result">Upload Successful</span>
+                      <span class="err" ng-show="errorMsg">{{errorMsg}}</span>      
+                    </div>
+
+
                     <div class="form-group" ng-class="{ 'has-error' : registrationForm.user.firstname.$error.required && !registrationForm.user.firstname.$pristine }">
                         <label for="firstname" class="col-sm-2 control-label">First Name</label>
                         <div class="col-sm-10">
@@ -71,8 +105,11 @@
                 </form>
 
   </div>
+<!--
   <div class="modal-footer">
     Not yet a user? <a ng-click="register()"> Reguister </a> now!
     <button class="btn" ng-click="cancel()">Cancel</button>
   </div>
+-->
+
 </div>

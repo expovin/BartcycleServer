@@ -57,6 +57,17 @@ angular.module('bartCycle', ['ui.router','ngResource','angular.filter','ui.boots
             })
 
             // route for the contactus page
+            .state('app.personalpage', {
+                url:'PersonalPage',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/PersonalPage.html',
+                        controller  : 'PersonalPageController'                  
+                    }
+                }
+            })
+
+            // route for the contactus page
             .state('app.objdetails', {
                 url:'ObjectDetails',
                 views: {

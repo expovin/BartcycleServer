@@ -42,6 +42,10 @@ var User = new Schema({
       min : 0,
       required : true
     },
+    img : {
+      type : String,
+      required : false      
+    },
     "objectsId" : [{
       type: Schema.Types.ObjectId,
       ref : 'Objects'

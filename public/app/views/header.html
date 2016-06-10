@@ -22,8 +22,9 @@
                       <a ng-click="login()"><h3><span class="glyphicon glyphicon-log-in" aria-hidden="true" ></span></h3></a>
                 </li>
                 <div ng-if="isLoggedIn">
-                  <li class="col-md-10">
-                      <h3>{{fullName}}</h3>
+                  <li class="col-md-6">
+                   <!--   <h3>{{fullName}}</h3> -->
+                        <a href="#PersonalPage"><img class="img-circle icon" data-ng-src="data:image/png;base64,{{image}}"></a>
                   </li>
                   <li class="col-md-1">
                         <a ng-click="logout()"><h3><span class="glyphicon glyphicon-log-out" aria-hidden="true" ></span></h3></a>    

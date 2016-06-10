@@ -1,0 +1,60 @@
+    <div class="container">
+        <div class="row row-content">
+          <div class="col-md-4">
+              <img class="media-object" data-ng-src="data:image/png;base64,{{User.img}}" alt="Alternative text" height="300">
+          </div>
+          <div class="col-md-5">
+              <h1>{{User.firstname}} {{User.lastname}} </h1>
+              <dl class="dl-horizontal" >
+                <dt>Username</dt>
+                <dd>{{User.username}}</dd>    
+                <dt>Credit</dt>
+                <dd>{{User.vt}}</dd>   
+                <dt>User from</dt>
+                <dd>{{User.createdAt | date:'fullDate' }}</dd>
+              </dl>
+              <h3>Address</h3>
+              <dl class="dl-horizontal" >
+                  <dt>Country</dt>
+                  <dd>{{User.address.country}}</dd>
+                  <dt>Zip Code</dt>
+                  <dd>{{User.address.zip}}</dd>
+                  <dt>City</dt>
+                  <dd>{{User.address.city}}</dd>
+              </dl>
+          </div>
+          <div class="col-md-1"><h1 style="color:red;">{{User.vt}}</h1></div>
+        </div>
+
+
+
+
+      <div class="row row-content" ng-repeat="obj in UserMyObjects">
+        <div class="media" >
+          <div class="media-left media-middle">
+            <a href="#ObjectDetails?id={{obj._id}}">
+              <img class="media-object" data-ng-src="data:image/png;base64,{{obj.picFile}}" alt="Alternative text" height="150">
+            </a>
+          </div>
+          <div class="media-body">
+
+            
+              <h3 class="media-heading">{{obj.title}}   <span class="badge">{{obj.vt}}</span></h3>
+              <div class="alert alert-success" role="alert" ng-show="{{obj.state == 'Published'}}">Published</div>
+              <div class="alert alert-danger" role="alert" ng-show="{{obj.state == 'Unpublished'}}">Unpublished</div>
+              <small>{{obj.category}}</small>
+              <p>{{obj.description}}</p>
+              <p>{{obj.location.zip}} {{obj.location.city}}</p>
+            
+                <div class="btn-group" role="group" aria-label="true">
+                  <button type="button" class="btn-success btn-lg" ng-show="{{obj.state == 'Unpublished'}}" ng-click="publish(obj._id)">Publish</button>
+                  <button type="button" class="btn-warning btn-lg" ng-show="{{obj.state == 'Published'}}" ng-click="unpublish(obj._id)">Unpublish</button>
+                  <button type="button" class="btn-danger btn-lg" ng-show="{{obj.state == 'Unpublished'}}" >Delete</button>
+                </div>
+
+          </div>
+        </div> 
+        </div>
+
+        
+    </div>

@@ -1,13 +1,12 @@
     <div class="container">
         <div class="row row-content">
-          <div class="col-md-2">
-              <h3>Placeholder image</h3> 
+          <div class="col-md-4">
+              <img class="media-object" data-ng-src="data:image/png;base64,{{ObjsDetails.picFile}}" alt="Alternative text" height="300">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-5">
               <h1>{{ObjsDetails.title}}</h1>    
           </div>
-          <div class="col-md-2"><small><i>{{ObjsDetails._id}}</i></small></div>
-          <div class="col-md-1"><h1>{{ObjsDetails.vt}}</h1></div>
+          <div class="col-md-1"><h1><span class="badge">{{ObjsDetails.vt}}</span></h1></div>
         </div>
 
       <div class="row row-content">

@@ -192,7 +192,7 @@ module.exports =  function handleGetObject(err, obj, req, res) {
 		response = res;
 		good = obj;
 		// Retrive the Buyer details
-		Users.findById(req.decoded._doc._id).exec(handleBuyerDetails);
+		Users.findById(req.decoded._id).exec(handleBuyerDetails);
 	}
 }
 

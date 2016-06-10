@@ -135,6 +135,7 @@
               var promise;
 
               fileObject.base64 = $window._arrayBufferToBase64(buffer);
+			  console.log(fileObject);
 
               if (attrs.parser) {
                 promise = $q.when(scope.parser()(file, fileObject));
@@ -170,6 +171,7 @@
 
           ngModel.$isEmpty = function(val) {
             return !val || (angular.isArray(val) ? val.length === 0 : !val.base64);
+			console.log(val);
           };
 
           // http://stackoverflow.com/questions/1703228/how-can-i-clear-an-html-file-input-with-javascript

@@ -24,6 +24,7 @@ var users = require('./routes/users');
 var categories = require('./routes/category');
 
 var app = express();
+app.use(bodyParser({limit: '5mb'}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

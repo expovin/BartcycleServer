@@ -6,8 +6,8 @@ angular.module('bartCycle')
             $http.defaults.headers.common['x-access-token']=$sessionStorage.get('token');
         }])
 
-        .controller('HeaderController', ['$scope', 'headerFactory','$modal','$sessionStorage','$state','loginFactory', 
-            function($scope,headerFactory,$modal,$sessionStorage,$state,loginFactory) {
+        .controller('HeaderController', ['$scope', 'headerFactory','$modal','$sessionStorage','$state','loginFactory', 'userFactory',
+            function($scope,headerFactory,$modal,$sessionStorage,$state,loginFactory,userFactory) {
 
             console.log("Logged flag :" + $sessionStorage.isLogged('token'));
             $scope.isLoggedIn = $sessionStorage.isLogged('token');
@@ -18,7 +18,8 @@ angular.module('bartCycle')
                 loginFactory.getFullname().get()
                 .$promise.then(
                     function(response){
-                        $scope.fullName=response.fullName;
+                        $scope.fullName=response.firstname+" "+response.lastname;
+                        $scope.image=response.img;
                     },
                     function(response) {
                         console.log("Errore! Non sei autenticato... cancello il token");
@@ -66,6 +67,17 @@ angular.module('bartCycle')
                 $sessionStorage.delete('token');
                 $state.reload();
             }
+
+            $scope.register = function(){
+                console.log("Register");
+                $modal.open({
+                  templateUrl: 'views/ModalRegister.html',
+                  controller: 'RegisterController',
+                  windowClass: 'app-modal-login',
+                  scope: $scope
+                });
+            }
+
                         
         }])
 
@@ -117,10 +129,9 @@ angular.module('bartCycle')
 
             $scope.publishNewObject = function(){                
                 $scope.publishForm.object.state = "Published";
-                
-                console.log("object:");
-                console.log($scope.publishForm.object);
-                $scope.publishForm.object.picFile = "";
+                console.log($scope.picFile);
+                $scope.publishForm.object["picFile"] = $scope.picFile.base64;
+                console.log($scope.object);
                 objectFactory.publishNewObject().save($scope.publishForm.object, function(){
                     console.log("Object Published!");
                     $modalInstance.dismiss('cancel');
@@ -154,8 +165,10 @@ angular.module('bartCycle')
         .controller('RegisterController', ['$scope','userFactory','$modalInstance',  function($scope,userFactory,$modalInstance) {
 
             $scope.registerUser = function() {
-                console.log('registerUser fired!');
                 $scope.registrationForm.user.vt=5;
+                $scope.registrationForm.user.img = $scope.picFile.base64;
+
+                console.log($scope.registrationForm.user);
                 
                 userFactory.getUsers().save($scope.registrationForm.user, function(){
                     console.log("User Created!");
@@ -184,14 +197,57 @@ angular.module('bartCycle')
         }])
 
 
+        .controller('PersonalPageController', ['$scope','loginFactory','objectFactory','$state',  function($scope,loginFactory,objectFactory,$state) {
+            console.log("In Personal Page!");
 
-        .controller('LocationController', ['$scope',  function($scope) {
+            $scope.unpublish = function (objId) {
+                console.log("Oggetto da spubblicare : "+objId);
+                objectFactory.modifyObj().update({ 'objId': objId},{"state":"Unpublished"});
+                $state.reload();
+            }
+
+            $scope.publish = function (objId) {
+                console.log("Oggetto da Pubblicare : "+objId);
+                objectFactory.modifyObj().update({ 'objId': objId},{"state":"Published"});
+                $state.reload();
+            }
+
+            loginFactory.getFullname().get()
+                    .$promise.then(
+                        function(response){
+                            console.log("get all user details");
+                            console.log(response);
+                            $scope.User = response;
+                            loginFactory.getMyObjects().get({uid:response._id})
+                                .$promise.then(
+                                    function(response){
+                                        $scope.UserMyObjects = response.objectsId;
+                                        
+                                    },
+                                    function(response) {
+                                        console.log("Errore!");
+                                    }
+                                );
+
+                        },
+                        function(response) {
+                            console.log("Errore!");
+                        }
+                    );
             
+
 
         }])
 
 
-        .controller('ResultsController', ['$scope', '$location','resultFactory', function($scope,$location,resultFactory) {
+        .controller('LocationController', ['$scope',  function($scope) {
+
+
+
+        }])
+
+
+        .controller('ResultsController', ['$scope', '$location','resultFactory','$sessionStorage','$state', function($scope,$location,resultFactory,$sessionStorage,$state) {
             $scope.category = $location.search().cat;
             
                     $scope.results =  resultFactory.getObjectByCat($scope.category).query(
@@ -201,6 +257,21 @@ angular.module('bartCycle')
                     function(response) {
                         console.log("Qui ERRORE!");
                     });
+
+                    $scope.isLoggedin = $sessionStorage.isLogged('token');
+
+                    $scope.getObject = function(objId) {
+                        console.log("Get it! " + objId);
+                        resultFactory.getObject().update({ 'objId': objId},null,function(response){
+                            if(response.code > 50)
+                                alert(response.message);
+                            $state.reload();
+                            
+
+                            
+                        });    
+                    }
+                    
 
         }])
 

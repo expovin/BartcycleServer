@@ -12,7 +12,7 @@ var Verify    = require('./verify');
 
 router.route('/')
 .get(Verify.verifyOrdinaryUser, function(req, res, next){
-    Users.findById(req.decoded._doc._id)
+    Users.findById(req.decoded._id)
     .populate('objectsId')
     .exec(function (err, objs) {
       if (err) throw err;
@@ -24,26 +24,30 @@ router.route('/')
 
 router.route('/publish')
 .post(Verify.verifyOrdinaryUser, function(req, res, next){
-  req.body.userId = req.decoded._doc._id;
-  
-  var location =  {"zip" :req.decoded._doc.address.zip, "country":req.decoded._doc.address.country, "city":req.decoded._doc.address.city};
+  req.body.userId = req.decoded._id;
 
-  req.body["location"] = location;
-  console.log(req.body);
+    Users.findById(req.decoded._id)
+//    .populate('objectsId')
+    .exec(function (err, objs) {
+        if (err) throw err;
+        var location =  {"zip" :objs.address.zip, "country":objs.address.country, "city":objs.address.city};
+        req.body["location"] = location;
 
-    Objs.create(req.body, function (err, obj){
-    	if (err) throw err;
-    	var Objid = obj._id;
+        Objs.create(req.body, function (err, obj){
+          if (err) throw err;
+          var Objid = obj._id;
 
-      // Update the user info
-      Users.findByIdAndUpdate(
-          req.decoded._doc._id,             // This is the logged in's userId 
-          {$push: {"objectsId": Objid}},
-          {safe: true, upsert: true},
-          function(err, model) {
-              res.json({code:'200', message:'Object created '});
-          });
+          // Update the user info
+          Users.findByIdAndUpdate(
+              req.decoded._id,             // This is the logged in's userId 
+              {$push: {"objectsId": Objid}},
+              {safe: true, upsert: true},
+              function(err, model) {
+                  res.json({code:'200', message:'Object created '});
+              });
+        });
     });
+
 });
 
 
@@ -58,6 +62,14 @@ router.route('/update/:objd')
 	        res.json(model);
 	    });
 });
+
+router.route('/delete/:objd')
+.delete(Verify.verifyOrdinaryUser, function(req, res, next){
+
+    Objs.find({ _id:req.params.objd }).remove().exec();
+
+});
+
 
 router.route('/get/:objd')
 .put(Verify.verifyOrdinaryUser,function(req, res, netx){
@@ -84,7 +96,7 @@ router.route('/get/:objd')
 */
 //Find By Category
 router.route('/category/:catId')
-.get(Verify.verifyOrdinaryUser,  function(req, res, next) {
+.get(function(req, res, next) {
   Objs.find({'category' : req.params.catId, 'state':'Published'})
   .exec(function (err, obj) {
   	if (err) throw err;
