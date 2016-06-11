@@ -8,6 +8,12 @@ var MakeTransaction = require('../app_controllers/makeTransaction');
 var passport = require('passport');
 var Verify    = require('./verify');
 
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 /* GET users listing. */
 
 router.route('/')

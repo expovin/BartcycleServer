@@ -73,7 +73,7 @@ angular.module('bartCycle', ['ui.router','ngResource','angular.filter','ui.boots
                 views: {
                     'content@': {
                         templateUrl : 'views/objdetails.html',
-                        controller  : 'ObjDettController'                  
+                        controller  : 'ResultsController'                  
                     }
                 }
             })

@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('bartCycle')
-        .constant("baseURL","http://localhost:3000/")
+//        .constant("baseURL","http://localhost:3000/")
+        .constant("baseURL","http://bartcycle.mybluemix.net/")
 //        .factory('menuFactory', ['$http', 'baseURL', function($http,baseURL) {
 
 

@@ -165,7 +165,8 @@ angular.module('bartCycle')
         .controller('RegisterController', ['$scope','userFactory','$modalInstance',  function($scope,userFactory,$modalInstance) {
 
             $scope.registerUser = function() {
-                $scope.registrationForm.user.vt=5;
+               // $scope.registrationForm.user.vt=5;
+               if($scope.picFile.base64)
                 $scope.registrationForm.user.img = $scope.picFile.base64;
 
                 console.log($scope.registrationForm.user);
@@ -247,12 +248,33 @@ angular.module('bartCycle')
         }])
 
 
-        .controller('ResultsController', ['$scope', '$location','resultFactory','$sessionStorage','$state', function($scope,$location,resultFactory,$sessionStorage,$state) {
+        .controller('ResultsController', ['$scope', '$location','resultFactory','$sessionStorage','$state','headerFactory', 'loginFactory',
+            function($scope,$location,resultFactory,$sessionStorage,$state,headerFactory,loginFactory) {
+
             $scope.category = $location.search().cat;
+            $scope.idObj = $location.search().id;
             
                     $scope.results =  resultFactory.getObjectByCat($scope.category).query(
                     function(response) {                        
                         console.log("OK!");
+
+                        // Find my own object
+                        /*
+                        loginFactory.getFullname().get()
+                        .$promise.then(
+                            function(objList){
+                                $scope.myObjs=response.objectsId;
+                                console.log(objList);
+                                console.log($scope.results);
+                            },
+                            function(response) {
+                                console.log("Errore! Non sei autenticato... cancello il token");
+                                $sessionStorage.delete('token');
+                                $state.reload();
+                            }
+                        );
+                        */
+
                     },
                     function(response) {
                         console.log("Qui ERRORE!");
@@ -272,6 +294,17 @@ angular.module('bartCycle')
                         });    
                     }
                     
+                    resultFactory.getObjectDetails().get({objId:$scope.idObj})
+                    .$promise.then(
+                        function(response){
+                            console.log("get all details");
+                            console.log(response.title);
+                            $scope.ObjsDetails = response;
+                        },
+                        function(response) {
+                            console.log("Errore!");
+                        }
+                    );
 
         }])
 
